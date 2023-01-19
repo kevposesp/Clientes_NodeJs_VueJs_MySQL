@@ -9,7 +9,7 @@ var bcrypt = require("bcryptjs");
 signin = (req, res) => {
     User.findOne({
         where: {
-            username: req.body.username
+            username: req.body.user
         }
     })
         .then(async (user) => {

@@ -1,40 +1,21 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
+const dummies = require("./dummies/index");
 var bcrypt = require("bcryptjs");
 
 const db = require("./models");
 const User = db.user;
 
-db.sequelize.sync({ force: true }).then(() => {
+db.sequelize.sync(
+  {
+    force: true
+  }
+).then(() => {
   console.log('Drop and Resync Db');
-  initial();
-});
+  dummies.createClients()
+})
 
-async function initial() {
-  // Users
-
-  const admin = await User.create({
-    username: "admin",
-    email: "admin@gmail.com",
-    password: bcrypt.hashSync("12345678", 8)
-  }).then(user => {
-    return user
-  })
-
-  // Clients
-  const kevin = await User.create({
-    username: "kevin",
-    email: "kevin@gmail.com",
-    password: bcrypt.hashSync("12345678", 8)
-  })
-    .then(user => {
-      return user
-    })
-  // /Clients
-
-  // /Users
-}
 
 var corsOptions = {
   origin: "http://localhost:8081"

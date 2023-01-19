@@ -1,5 +1,6 @@
-// const controller = require("../controllers/auth.controller");
-// const { verifyToken } = require("../middleware/authJwt");
+const controller = require("../controllers/auth.controller");
+const { verifyToken } = require("../middleware/authJwt");
+const { enableLog } = require("../middleware/auth");
 
 module.exports = function (app) {
     app.use(function (req, res, next) {
@@ -10,7 +11,13 @@ module.exports = function (app) {
         next();
     });
 
-    // app.post("/auth/signin", controller.signin);
+    app.post(
+        "/auth/signin",
+        [
+            enableLog
+        ],
+        controller.signin
+    );
 
     // app.post(
     //     "/auth/info",
