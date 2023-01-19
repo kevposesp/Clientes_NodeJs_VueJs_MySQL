@@ -6,6 +6,21 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.UUID,
             defaultValue: Sequelize.UUIDV4
         },
+        nombre: {
+            type: Sequelize.STRING
+        },
+        direccion: {
+            type: Sequelize.STRING
+        },
+        notas: {
+            type: Sequelize.STRING
+        },
+        tel: {
+            type: Sequelize.STRING
+        },
+        telSec: {
+            type: Sequelize.STRING
+        },
         username: {
             type: Sequelize.STRING
         },
