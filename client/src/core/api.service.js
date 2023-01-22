@@ -7,7 +7,11 @@ export var httpClient = axios.create({
 
 const ApiService = {
     get(path) {
-        return httpClient.get(path)
+        return httpClient.get(path, {
+            headers: {
+                "x-access-token": localStorage.getItem('accessToken')
+            }
+        })
             .catch((error) => { return error })
     },
     post(path, body) {

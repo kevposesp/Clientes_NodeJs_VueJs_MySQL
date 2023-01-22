@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Login from '../views/Login'
+import Clients from '../views/Clients'
 import checkUser from "@/core/checkUser";
 const routes = [
   {
@@ -13,6 +14,14 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login
+  },
+  {
+    path: '/clients',
+    name: 'clients',
+    component: Clients,
+    meta: {
+      protectedRoute: true
+    }
   }
 ]
 
@@ -25,7 +34,6 @@ router.beforeEach(async (to, from, next) => {
   const routeIsProtected = to.matched.some(item => item.meta.protectedRoute)
   if (routeIsProtected) {
     const access = await checkUser.checkUser()
-    console.log(access);
     if (!access) {
       next('/login')
     } else {

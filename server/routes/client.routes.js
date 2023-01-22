@@ -1,5 +1,5 @@
-// const { authJwt } = require("../middleware");
-// const {} = require("../controllers/client.controller");
+const { verifyToken } = require("../middleware/authJwt");
+const { listClients } = require("../controllers/client.controller");
 
 module.exports = function (app) {
     app.use(function (req, res, next) {
@@ -9,6 +9,14 @@ module.exports = function (app) {
         );
         next();
     });
+
+    app.get(
+        "/clients/list",
+        [
+            verifyToken
+        ],
+        listClients
+    )
 
 
     // app.get(

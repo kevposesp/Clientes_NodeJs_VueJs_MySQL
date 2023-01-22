@@ -99,8 +99,8 @@ infoUser = (req, res) => {
             if (!user) {
                 return res.status(404).send({ message: "err_usr_ex" });
             }
-            if(!enableLog) {
-                return res.status(403).send({message: "err_usr_en"})
+            if (!enableLog) {
+                return res.status(403).send({ message: "err_usr_en" })
             }
             res.status(200).send({
                 // id: user.id,
