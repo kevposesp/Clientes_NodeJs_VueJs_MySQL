@@ -18,7 +18,29 @@ export function clientsComp() {
 
     }
 
+    const deleteClient = async (id) => {
+
+        const res = await ApiService.post(
+            "/clients/delete",
+            {
+                id
+            }
+        )
+
+        return res.data
+        // if (res.data && res.data.message == 'delete_ok') {
+        //     return {
+        //         clients: res.data.data,
+        //         status: true
+        //     }
+        // } else {
+        //     return false
+        // }
+
+    }
+
     return {
-        list
+        list,
+        deleteClient
     }
 }

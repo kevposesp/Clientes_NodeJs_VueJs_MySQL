@@ -15,8 +15,23 @@ listClients = (req, res) => {
         });
 };
 
+deleteClient = async (req, res) => {
+    const { id } = req.body
+    User.destroy({
+        where: {
+            id
+        }
+    })
+        .then(user => {
+            res.status(200).send({
+                message: "delete_user_ok"
+            });
+        })
+}
+
 const authController = {
-    listClients
+    listClients,
+    deleteClient
 }
 
 module.exports = authController
