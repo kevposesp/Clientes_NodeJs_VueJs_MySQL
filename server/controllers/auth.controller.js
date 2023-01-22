@@ -5,8 +5,9 @@ const RefreshToken = db.refreshToken;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
+const { enableLog } = require("../middleware/auth");
 
-signin = (req, res) => {
+signin = async (req, res) => {
     User.findOne({
         where: {
             username: req.body.user
@@ -98,7 +99,9 @@ infoUser = (req, res) => {
             if (!user) {
                 return res.status(404).send({ message: "err_usr_ex" });
             }
-
+            if(!enableLog) {
+                return res.status(403).send({message: "err_usr_en"})
+            }
             res.status(200).send({
                 // id: user.id,
                 username: user.username,

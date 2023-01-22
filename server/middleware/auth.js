@@ -8,8 +8,7 @@ enableLog = async (req, res, next) => {
 
     try {
         const { user } = req.body
-        console.log(user);
-        await User.findAll({
+        await User.findOne({
             where: {
                 [Op.and]: [
                     { username: user },
@@ -26,7 +25,33 @@ enableLog = async (req, res, next) => {
             }
         })
     } catch (err) {
-        console.log(err);
+        res.status(403).send({
+            message: err
+        })
+    }
+
+}
+
+checkAccess = async (req, res, next) => {
+
+    try {
+        const userId = req.userId
+        await User.findOne({
+            where: {
+                id: userId
+            }
+        }).then(user => {
+            if (user) {
+                res.status(200).send({
+                    status: true
+                })
+            } else {
+                res.status(403).send({
+                    status: false
+                })
+            }
+        })
+    } catch (err) {
         res.status(403).send({
             message: err
         })
@@ -35,7 +60,7 @@ enableLog = async (req, res, next) => {
 }
 
 const authMiddleware = {
-    enableLog
+    enableLog, checkAccess
 };
 
 module.exports = authMiddleware;
