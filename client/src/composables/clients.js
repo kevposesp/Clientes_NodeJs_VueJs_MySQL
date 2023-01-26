@@ -28,11 +28,32 @@ export function clientsComp() {
         )
 
         return res.data
-        // if (res.data && res.data.message == 'delete_ok') {
-        //     return {
-        //         clients: res.data.data,
-        //         status: true
-        //     }
+
+    }
+
+    const listClient = async (id) => {
+
+        const res = await ApiService.post(
+            "/client/list/",
+            {id}
+        )
+        if(res?.data?.message == 'list_ok'){
+            return res.data.data
+        } else {
+            return false
+        }
+
+    }
+    
+    const updateClient = async (client) => {
+
+        const res = await ApiService.post(
+            "/client/edit/save/",
+            client
+        )
+        return res
+        // if(res?.data?.message == 'list_ok'){
+        //     return res.data.data
         // } else {
         //     return false
         // }
@@ -41,6 +62,8 @@ export function clientsComp() {
 
     return {
         list,
-        deleteClient
+        deleteClient,
+        listClient,
+        updateClient
     }
 }

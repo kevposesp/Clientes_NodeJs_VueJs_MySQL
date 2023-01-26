@@ -28,7 +28,11 @@
                                 <span class="badge rounded-pill text-bg-success">Active</span>
                             </td>
                             <td>
-                                <button class="btn btn-sm btn-primary mx-1"><i class="bi bi-pencil-square"></i></button>
+                                <router-link :to="'/client/edit/' + client.id">
+                                    <button class="btn btn-sm btn-primary mx-1"><i
+                                            class="bi bi-pencil-square"></i></button>
+                                </router-link>
+
                                 <button class="btn btn-sm btn-danger mx-1" @click="deleteModal(client)"><i
                                         class="bi bi-trash3-fill"></i></button>
                                 <button class="btn btn-sm btn-success mx-1"><i class="bi bi-plus-lg"></i></button>

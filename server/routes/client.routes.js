@@ -1,5 +1,5 @@
 const { verifyToken } = require("../middleware/authJwt");
-const { listClients, deleteClient } = require("../controllers/client.controller");
+const { listClients, listClient, updateClient, deleteClient } = require("../controllers/client.controller");
 
 module.exports = function (app) {
     app.use(function (req, res, next) {
@@ -16,6 +16,22 @@ module.exports = function (app) {
             verifyToken
         ],
         listClients
+    )
+    
+    app.post(
+        "/client/list",
+        [
+            verifyToken
+        ],
+        listClient
+    )
+
+    app.post(
+        "/client/edit/save",
+        [
+            verifyToken
+        ],
+        updateClient
     )
 
     app.post(

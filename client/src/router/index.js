@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Login from '../views/Login'
 import Clients from '../views/Clients'
+import editClient from '../views/EditClient'
 import checkUser from "@/core/checkUser";
 const routes = [
   {
@@ -19,6 +20,14 @@ const routes = [
     path: '/clients',
     name: 'clients',
     component: Clients,
+    meta: {
+      protectedRoute: true
+    }
+  },
+  {
+    path: '/client/edit/:id',
+    name: 'editClient',
+    component: editClient,
     meta: {
       protectedRoute: true
     }
