@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import Home from '../views/Home'
 import Login from '../views/Login'
 import Clients from '../views/Clients'
 import editClient from '../views/EditClient'
@@ -8,7 +8,7 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView,
+    component: Home,
     meta: { protectedRoute: true }
   },
   {

@@ -1,0 +1,66 @@
+<template>
+  <div class="home">
+    <createDateEvent v-on:createEvent="res"></createDateEvent>
+    <Alert :alert-data="state.alertData" v-if="state.alertData.open"></Alert>
+  </div>
+</template>
+
+<script>
+import createDateEvent from '@/components/CreateDateEvent.vue'
+import Alert from '@/components/Alert.vue'
+import { ref, reactive } from 'vue'
+
+export default {
+  name: 'Home',
+  components: {
+    createDateEvent,
+    Alert
+  },
+  setup() {
+    const state = reactive({
+      alertData: {
+        open: false,
+        status: 0,
+        message: ''
+      }
+    })
+
+    const res = async (e) => {
+      if (e == true) {
+        state.alertData.open = true
+        state.alertData.status = 200
+        state.alertData.message = 'Se ha creado el evento'
+        setTimeout(() => {
+          state.alertData.open = false
+        }, 3000);
+      } else if(e == "ex_event"){
+        state.alertData.open = true
+        state.alertData.status = 500
+        state.alertData.message = 'Ya existe esta fecha de evento'
+        setTimeout(() => {
+          state.alertData.open = false
+        }, 3000);
+      } else {
+        state.alertData.open = true
+        state.alertData.status = 500
+        state.alertData.message = 'Error al crear el evento'
+        setTimeout(() => {
+          state.alertData.open = false
+        }, 3000);
+      }
+    }
+
+    return {
+      state,
+      res
+    }
+  }
+}
+</script>
+
+<style lang="scss">
+.home {
+  margin-top: 56px;
+  padding: 5px;
+}
+</style>
