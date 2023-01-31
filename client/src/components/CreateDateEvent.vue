@@ -1,6 +1,6 @@
 <template>
     <div class="createDateEvent">
-        <div class="card" style="width: 18rem;">
+        <div class="card m-auto" style="width: 18rem;">
             <div class="card-body">
                 <h5 class="card-title">Crear evento</h5>
                 <div class="row mb-2">
@@ -61,7 +61,8 @@ export default {
             return {
                 nombre: data.nombre,
                 descripcion: data.descripcion,
-                date: data.date.getFullYear() + '/' + data.date.getMonth() + 1 + '/' + data.date.getDate()
+                date: data.date,
+                dateOn: data.date.getFullYear() + '/' + data.date.getMonth()+1 + '/' + data.date.getDate()
             }
         }
 

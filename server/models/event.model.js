@@ -14,6 +14,9 @@ module.exports = (sequelize, Sequelize) => {
         },
         date: {
             type: Sequelize.DATE(6)
+        },
+        dateOn: {
+            type: Sequelize.DATEONLY
         }
     });
     return Event;

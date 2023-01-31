@@ -1,9 +1,5 @@
 <template>
   <div class="app">
-    <!-- <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav> -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
         <router-link class="navbar-brand" :to="'/'">Home</router-link>
@@ -23,10 +19,6 @@
 
             </li>
           </ul>
-          <!-- <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-light" type="submit">Search</button>
-          </form> -->
           <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
               aria-expanded="false">
@@ -94,6 +86,7 @@ export default {
     right: 0;
     left: 0;
     top: 0;
+    z-index: 100;
   }
 }
 

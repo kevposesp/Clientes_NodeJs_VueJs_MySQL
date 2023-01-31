@@ -1,5 +1,5 @@
 const { verifyToken } = require("../middleware/authJwt");
-const { createEvent } = require("../controllers/event.controller");
+const { createEvent, readEvents } = require("../controllers/event.controller");
 
 module.exports = function (app) {
     app.use(function (req, res, next) {
@@ -16,6 +16,14 @@ module.exports = function (app) {
             verifyToken
         ],
         createEvent
+    )
+    
+    app.get(
+        "/events/list",
+        [
+            verifyToken
+        ],
+        readEvents
     )
 
 };

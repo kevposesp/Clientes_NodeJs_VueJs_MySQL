@@ -20,7 +20,27 @@ export function eventsComp() {
 
     }
 
+    const readEvents = async () => {
+        const res = await ApiService.get(
+            "/events/list"
+        )
+
+        if(res.data && res?.data?.message == 'list_ok'){
+            return {
+                status: true,
+                events: res.data.data
+            }
+        } else {
+            return {
+                status: false
+            }
+        }
+
+        return res
+    }
+
     return {
-        createEvent
+        createEvent,
+        readEvents
     }
 }

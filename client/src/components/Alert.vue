@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex position-absolute w-100 justify-content-end top-0">
+    <div class="d-flex position-absolute w-100 justify-content-end top-0 alert">
         <div class="alert d-flex mx-4"
             :class="{ 'alert-success': alertData.status === 200, 'alert-danger': alertData.status !== 200 }"
             role="alert">
@@ -28,5 +28,7 @@ export default {
 </script>
 
 <style lang="scss">
-
+.alert {
+    z-index: 1000;
+}
 </style>

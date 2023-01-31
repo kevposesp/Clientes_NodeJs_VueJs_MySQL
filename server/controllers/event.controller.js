@@ -2,10 +2,10 @@ const db = require("../models");
 const Event = db.event;
 
 createEvent = (req, res) => {
-    const { nombre, descripcion, date } = req.body
+    const { nombre, descripcion, date, dateOn } = req.body
     Event.findOne({
         where: {
-            date
+            dateOn
         }
     }).then((ev) => {
         if (ev) {
@@ -16,7 +16,8 @@ createEvent = (req, res) => {
             Event.create({
                 nombre,
                 descripcion,
-                date
+                date,
+                dateOn
             }).then((event) => {
                 if (event) {
                     res.status(200).send({
@@ -33,8 +34,27 @@ createEvent = (req, res) => {
 
 }
 
+readEvents = (req, res) => {
+    Event.findAll({
+        attributes: ['id', 'descripcion', 'date']
+    })
+    .then((evs) => {
+        if(evs) {
+            res.status(200).send({
+                message: 'list_ok',
+                data: evs
+            })
+        } else {
+            res.status(500).send({
+                message: 'err_list_events'
+            })
+        }
+    })
+}
+
 const eventController = {
-    createEvent
+    createEvent,
+    readEvents
 }
 
 module.exports = eventController
