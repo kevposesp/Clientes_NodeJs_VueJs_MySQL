@@ -38,6 +38,21 @@ db.user.hasOne(db.refreshToken, {
 db.user.hasMany(db.order, {
     foreignKey: 'userId', targetKey: 'id'
 })
-db.order.belongsTo(db.user);
+db.order.belongsTo(db.user, {
+    foreignKey: 'userId', targetKey: 'id'
+})
+
+db.user.hasMany(db.order, {
+    foreignKey: 'ownerId', targetKey: 'id'
+})
+db.order.belongsTo(db.user, {
+    foreignKey: 'ownerId', targetKey: 'id'
+})
+db.event.hasMany(db.order, {
+    foreignKey: 'eventId'
+})
+db.order.belongsTo(db.event,{
+    foreignKey: 'eventId'
+})
 
 module.exports = db;

@@ -11,12 +11,9 @@
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
               <router-link class="nav-link" :class="route == 'clients' ? 'active' : ''" :to="'/clients'" >Clientes</router-link>
-              <!-- <a class="nav-link" :class="route == 'clients' ? 'active' : ''" href="#">Clientes</a> -->
             </li>
             <li class="nav-item">
-              <!-- <a class="nav-link" :class="route == 'orders' ? 'active' : ''" href="#">Pedidos</a> -->
               <router-link class="nav-link" :class="route == 'orders' ? 'active' : ''" :to="'/orders'" >Pedidos</router-link>
-
             </li>
           </ul>
           <div class="dropdown">

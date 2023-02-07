@@ -3,7 +3,9 @@ import Home from '../views/Home'
 import Login from '../views/Login'
 import Clients from '../views/Clients'
 import editClient from '../views/EditClient'
+import Orders from '@/views/Orders'
 import checkUser from "@/core/checkUser";
+
 const routes = [
   {
     path: '/',
@@ -28,6 +30,14 @@ const routes = [
     path: '/client/edit/:id',
     name: 'editClient',
     component: editClient,
+    meta: {
+      protectedRoute: true
+    }
+  },
+  {
+    path: '/orders',
+    name: 'orders',
+    component: Orders,
     meta: {
       protectedRoute: true
     }

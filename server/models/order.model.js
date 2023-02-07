@@ -6,9 +6,6 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.UUID,
             defaultValue: Sequelize.UUIDV4
         },
-        fechaDia: {
-            type: Sequelize.DATEONLY
-        },
         horaPedido: {
             type: Sequelize.TIME
         },
@@ -19,6 +16,9 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING
         },
         cant: {
+            type: Sequelize.INTEGER
+        },
+        status: {
             type: Sequelize.INTEGER
         }
     });
