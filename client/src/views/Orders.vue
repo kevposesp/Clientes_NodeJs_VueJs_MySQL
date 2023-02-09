@@ -28,36 +28,38 @@
                             </thead>
                             <tbody>
                                 <tr v-for="(order, key) in state.ordersList[date]" :key="key">
-                                    <th scope="row">{{ key+ 1 }}</th>
-                                    <td>{{ order.nombreClient }}</td>
-                                    <td>{{ order.direccion }}</td>
-                                    <td>{{ order.horaPedido.substring(0, 5) }}</td>
-                                    <td>{{ order.cant }}</td>
-                                    <td>{{ order.nota }}</td>
-                                    <td>{{ order.nombreOwner }}</td>
-                                    <td>
-                                        <!-- <span class="badge rounded-pill text-bg-danger">InActive</span> -->
-                                        <span class="badge rounded-pill text-bg-secondary"
-                                            v-if="order.status == 0">Pendiente</span>
-                                        <span class="badge rounded-pill text-bg-success"
-                                            v-if="order.status == 3">Completado</span>
-                                        <span class="badge rounded-pill text-bg-warning"
-                                            v-if="order.status == 2">Pendiente Pago</span>
-                                        <span class="badge rounded-pill text-bg-danger"
-                                            v-if="order.status == 4">Cancelado</span>
-                                        <span class="badge rounded-pill text-bg-primary" v-if="order.status == 1">En
-                                            reparto</span>
-                                        <span class="badge rounded-pill text-bg-info"
-                                            v-if="order.status == 5">Preparado</span>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary mx-1"><i
-                                                class="bi bi-pencil-square"></i></button>
-                                        <button class="btn btn-sm btn-danger mx-1"><i
-                                                class="bi bi-trash3-fill"></i></button>
-                                        <button class="btn btn-sm btn-success mx-1"><i
-                                                class="bi bi-plus-lg"></i></button>
-                                    </td>
+                                    <template v-if="order.orderId">
+                                        <th scope="row">{{ key+ 1 }}</th>
+                                        <td>{{ order.nombreClient }}</td>
+                                        <td>{{ order.direccion }}</td>
+                                        <td>{{ order.horaPedido.substring(0, 5) }}</td>
+                                        <td>{{ order.cant }}</td>
+                                        <td>{{ order.nota }}</td>
+                                        <td>{{ order.nombreOwner }}</td>
+                                        <td>
+                                            <!-- <span class="badge rounded-pill text-bg-danger">InActive</span> -->
+                                            <span class="badge rounded-pill text-bg-secondary"
+                                                v-if="order.status == 0">Pendiente</span>
+                                            <span class="badge rounded-pill text-bg-success"
+                                                v-if="order.status == 3">Completado</span>
+                                            <span class="badge rounded-pill text-bg-warning"
+                                                v-if="order.status == 2">Pendiente Pago</span>
+                                            <span class="badge rounded-pill text-bg-danger"
+                                                v-if="order.status == 4">Cancelado</span>
+                                            <span class="badge rounded-pill text-bg-primary" v-if="order.status == 1">En
+                                                reparto</span>
+                                            <span class="badge rounded-pill text-bg-info"
+                                                v-if="order.status == 5">Preparado</span>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary mx-1"><i
+                                                    class="bi bi-pencil-square"></i></button>
+                                            <button class="btn btn-sm btn-danger mx-1"><i
+                                                    class="bi bi-trash3-fill"></i></button>
+                                            <button class="btn btn-sm btn-success mx-1"><i
+                                                    class="bi bi-plus-lg"></i></button>
+                                        </td>
+                                    </template>
                                 </tr>
                                 <tr>
                                     <th scope="row">Total</th>
@@ -106,23 +108,23 @@ export default {
             let res = 0
             let res2 = 0
             state.ordersList[s].forEach(e => {
-                if(type == 'to'){
+                if (type == 'to' && e.orderId != null) {
                     res2++
                     res += e.cant
                 }
-                if(type == 'co' && e.status == 3) {
+                if (type == 'co' && e.status == 3) {
                     res2++
                     res += e.cant
                 }
-                if(type == 'pp' && [0, 1, 2, 5].includes(e.status)){
+                if (type == 'pp' && [0, 1, 2, 5].includes(e.status)) {
                     res2++
                     res += e.cant
                 }
-                if(type == 'ca' && e.status == 4) {
+                if (type == 'ca' && e.status == 4) {
                     res2++
                     res += e.cant
                 }
-                
+
             });
             return res2 + '/' + res
         }

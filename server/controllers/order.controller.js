@@ -8,10 +8,10 @@ readOrders = async (req, res) => {
         + " e.id eventId, e.`dateOn`, e.nombre nombreEvent,"
         + " u.id clientId, u.nombre nombreClient, u.direccion, u.notas notasCliente, u.tel, u.telSec,"
         + " ad.id ownerId, ad.nombre nombreOwner"
-        + " from `orders` o"
-        + " inner join `events` e on o.`eventId` = e.id"
-        + " inner join users u on o.`userId` = u.id"
-        + " inner join users ad on ad.id = o.`ownerId`"
+        + " from `events` e"
+        + " left join `orders` o on o.`eventId` = e.id"
+        + " left join users u on o.`userId` = u.id"
+        + " left join users ad on ad.id = o.`ownerId`"
         + " order by e.dateOn, o.horaPedido;"
 
     const orders = await sequelize.query(query, {

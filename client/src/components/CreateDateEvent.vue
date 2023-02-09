@@ -62,7 +62,7 @@ export default {
                 nombre: data.nombre,
                 descripcion: data.descripcion,
                 date: data.date,
-                dateOn: data.date.getFullYear() + '/' + data.date.getMonth()+1 + '/' + data.date.getDate()
+                dateOn: data.date.getFullYear() + '/' + (data.date.getMonth() + 1) + '/' + data.date.getDate()
             }
         }
 

@@ -39,6 +39,7 @@ export default {
         state.alertData.message = 'Se ha creado el evento'
         setTimeout(() => {
           state.alertData.open = false
+          window.location.reload()
         }, 3000);
       } else if (e == "ex_event") {
         state.alertData.open = true
