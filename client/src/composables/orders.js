@@ -20,7 +20,17 @@ export function ordersComp() {
         return res
     }
 
+    const createOrder = async (data) => {
+        const res = await ApiService.post(
+            "/orders/create",
+            data
+        )
+        
+        return res
+    }
+
     return {
-        readOrders
+        readOrders,
+        createOrder
     }
 }

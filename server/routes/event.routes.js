@@ -25,5 +25,12 @@ module.exports = function (app) {
         ],
         readEvents
     )
+    app.get(
+        "/events/list/ac",
+        [
+            verifyToken
+        ],
+        readEventsActive
+    )
 
 };

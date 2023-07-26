@@ -1,5 +1,6 @@
 const { verifyToken } = require("../middleware/authJwt");
-const { readOrders } = require("../controllers/order.controller");
+const { clientExists, eventExists } = require("../middleware/createOrder");
+const { readOrders, createOrder } = require("../controllers/order.controller");
 
 module.exports = function (app) {
     app.use(function (req, res, next) {
@@ -16,6 +17,16 @@ module.exports = function (app) {
             verifyToken
         ],
         readOrders
+    )
+    
+    app.post(
+        "/orders/create",
+        [
+            verifyToken,
+            clientExists,
+            eventExists
+        ],
+        createOrder
     )
 
 };

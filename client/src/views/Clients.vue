@@ -35,7 +35,9 @@
 
                                 <button class="btn btn-sm btn-danger mx-1" @click="deleteModal(client)"><i
                                         class="bi bi-trash3-fill"></i></button>
-                                <button class="btn btn-sm btn-success mx-1"><i class="bi bi-plus-lg"></i></button>
+                                <button class="btn btn-sm btn-success mx-1"
+                                    @click="state.createOrderData.open = true, state.createOrderData.idClient = client.id, state.createOrderData.nombreClient = client.nombre"><i
+                                        class="bi bi-plus-lg"></i></button>
                             </td>
                         </tr>
                     </tbody>
@@ -63,6 +65,7 @@
         </div>
         <div v-if="modalData.open" class="modal-backdrop fade" :class="modalData.open ? 'show' : ''"></div>
         <Alert :alert-data="state.alertData" v-if="state.alertData.open"></Alert>
+        <CreateOrder :create-order-data="state.createOrderData" v-on:statusOrder="res" v-if="state.createOrderData.open"></CreateOrder>
     </div>
 </template>
 
@@ -70,15 +73,21 @@
 import { clientsComp } from '../composables/clients'
 import { ref, reactive } from 'vue'
 import Alert from '../components/Alert.vue'
+import CreateOrder from '../components/CreateOrder.vue'
 
 export default {
-    components: { Alert },
+    components: { Alert, CreateOrder },
     setup() {
         const state = reactive({
             alertData: {
                 open: false,
                 status: 0,
                 message: ''
+            },
+            createOrderData: {
+                open: false,
+                idClient: 0,
+                nombreClient: ''
             }
         })
         const modalData = reactive({
@@ -125,12 +134,24 @@ export default {
             }
         }
 
+        const res = (m) => {
+            if(m) {
+                console.log(m);
+                console.log("creado");
+            } else {
+                console.log(m);
+                console.log('no creado');
+            }
+            state.createOrderData.open = false
+        }
+
         return {
             clients,
             deleteModal,
             modalData,
             deleteCli,
-            state
+            state,
+            res
         }
     },
 }

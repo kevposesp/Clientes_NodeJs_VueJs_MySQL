@@ -1,5 +1,6 @@
 const db = require("../models");
 const Order = db.order;
+const Event = db.event;
 const { QueryTypes } = require("sequelize");
 const { sequelize } = require("../models");
 
@@ -38,8 +39,33 @@ readOrders = async (req, res) => {
     }
 }
 
+createOrder = async (req, res) => {
+    const { idClient, fecOrder, cantOrder, hourOrder } = req.body
+
+    await Order.create({
+        horaPedido: hourOrder,
+        nota: "",
+        cant: cantOrder,
+        status: 0,
+        userId: idClient,
+        ownerId: req.userId,
+        eventId: fecOrder
+    }).then((order) => {
+        if (order) {
+            res.status(200).send({
+                message: 'create_ok'
+            })
+        } else {
+            res.status(500).send({
+                message: 'err_create_order'
+            })
+        }
+    })
+}
+
 const OrderController = {
-    readOrders
+    readOrders,
+    createOrder
 }
 
 module.exports = OrderController
