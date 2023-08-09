@@ -6,6 +6,9 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.UUID,
             defaultValue: Sequelize.UUIDV4
         },
+        direccionPedido: {
+            type: Sequelize.STRING
+        },
         horaPedido: {
             type: Sequelize.TIME
         },

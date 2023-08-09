@@ -31,7 +31,8 @@
                                     <template v-if="order.orderId">
                                         <th scope="row">{{ key+ 1 }}</th>
                                         <td>{{ order.nombreClient }}</td>
-                                        <td>{{ order.direccion }}</td>
+                                        <td v-if="order.direccionPedido != null">{{ order.direccionPedido }}</td>
+                                        <td v-if="order.direccionPedido == null">{{ order.direccion }}</td>
                                         <td>{{ order.horaPedido.substring(0, 5) }}</td>
                                         <td>{{ order.cant }}</td>
                                         <td>{{ order.nota }}</td>

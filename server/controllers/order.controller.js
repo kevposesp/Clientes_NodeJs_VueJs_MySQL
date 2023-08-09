@@ -5,7 +5,7 @@ const { QueryTypes } = require("sequelize");
 const { sequelize } = require("../models");
 
 readOrders = async (req, res) => {
-    const query = "select o.id orderId, o.horaPedido, o.horaEntrega, o.nota, o.cant, o.status,"
+    const query = "select o.id orderId, o.direccionPedido, o.horaPedido, o.horaEntrega, o.nota, o.cant, o.status,"
         + " e.id eventId, e.`dateOn`, e.nombre nombreEvent,"
         + " u.id clientId, u.nombre nombreClient, u.direccion, u.notas notasCliente, u.tel, u.telSec,"
         + " ad.id ownerId, ad.nombre nombreOwner"
@@ -40,11 +40,17 @@ readOrders = async (req, res) => {
 }
 
 createOrder = async (req, res) => {
-    const { idClient, fecOrder, cantOrder, hourOrder } = req.body
+    const { idClient, fecOrder, cantOrder, hourOrder, notaOrder } = req.body
+    
+    let dirPed = null
+    if (req.body.dirOrder != "") {
+        dirPed = req.body.dirOrder
+    }
 
     await Order.create({
+        direccionPedido: dirPed,
         horaPedido: hourOrder,
-        nota: "",
+        nota: notaOrder,
         cant: cantOrder,
         status: 0,
         userId: idClient,

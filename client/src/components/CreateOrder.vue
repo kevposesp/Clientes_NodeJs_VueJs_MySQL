@@ -35,6 +35,22 @@
                             </div>
                         </div>
 
+                        <div class="ord">
+                            <div class="form-floating mb-3 col-md col-12">
+                                <input type="text" class="form-control" id="floatingDir"
+                                    v-model="state.Order.dir">
+                                <label for="floatingDir">Direccion (opcional)</label>
+                            </div>
+                        </div>
+                        
+                        <div class="ord">
+                            <div class="form-floating mb-3 col-md col-12">
+                                <input type="text" class="form-control" id="floatingNota"
+                                    v-model="state.Order.nota">
+                                <label for="floatingNota">Nota Pedido (opcional)</label>
+                            </div>
+                        </div>
+
                         <div class="sect-time">
                             <div class="form-floating mb-3 col-md col-12">
                                 <input type="time" class="form-control" id="floatingTime"
@@ -83,7 +99,9 @@ export default {
                 nombreClient: data.nombreClient,
                 fecOrder: state.Order.day,
                 cantOrder: state.Order.cant,
-                hourOrder: state.Order.hour
+                hourOrder: state.Order.hour,
+                dirOrder: state.Order.dir,
+                notaOrder: state.Order.nota
             }
         }
 
