@@ -3,6 +3,9 @@ const User = db.user;
 
 listClients = (req, res) => {
     User.findAll({
+        where: {
+            status: 1
+        },
         attributes: ['id', 'nombre', 'direccion', 'notas', 'tel', 'telSec']
     })
         .then(clients => {
@@ -71,16 +74,24 @@ updateClient = async (req, res) => {
 
 deleteClient = async (req, res) => {
     const { id } = req.body
-    User.destroy({
+    const client = await User.findOne({
         where: {
             id
         }
     })
-        .then(user => {
-            res.status(200).send({
-                message: "delete_user_ok"
-            });
+    if(client){
+        await client.update({
+            status: 0
         })
+        await client.save()
+        res.status(200).send({
+            message: "delete_user_ok"
+        })
+    } else {
+        res.status(403).send({
+            message: "client_not_found"
+        })
+    }
 }
 
 const authController = {

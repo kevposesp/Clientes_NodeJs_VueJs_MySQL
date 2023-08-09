@@ -29,6 +29,9 @@ module.exports = (sequelize, Sequelize) => {
         },
         enableLog: {
             type: Sequelize.BOOLEAN
+        },
+        status: {
+            type: Sequelize.INTEGER
         }
     });
     return User;
