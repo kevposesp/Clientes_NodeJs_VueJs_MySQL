@@ -1,6 +1,6 @@
 <template>
     <div class="createOrder">
-        <div class="modal fade show d-block" @click="prueba">
+        <div class="modal fade show d-block" @click="closeModal">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -105,24 +105,24 @@ export default {
         loadEvents()
 
         const createOrderFunction = async (data) => {
-            console.log(await createOrder(data));
+            return await createOrder(data);
         }
 
-        const prueba = (p) => {
+        const closeModal = async (p) => {
             if (['modal fade show d-block', 'btn btn-secondary', 'btn-close'].includes(p.srcElement.className)) {
                 // cerrar modal de creacion de pedido
                 ctx.emit('statusOrder', 0)
             } else if (p.srcElement.className == 'btn btn-primary') {
                 // realizar pedido
-                createOrderFunction(processOrderData())
-                ctx.emit('statusOrder', 1)
+                let res = await createOrderFunction(processOrderData())
+                ctx.emit('statusOrder', {status: res.status})
             } else {
                 // No pasa nada
             }
         }
         return {
             createOrderData,
-            prueba,
+            closeModal,
             state
         }
     },

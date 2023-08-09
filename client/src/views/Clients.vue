@@ -135,12 +135,21 @@ export default {
         }
 
         const res = (m) => {
-            if(m) {
-                console.log(m);
-                console.log("creado");
-            } else {
-                console.log(m);
-                console.log('no creado');
+            console.log(m);
+            if(m.status == 200) {
+                state.alertData.open = true
+                state.alertData.status = 200
+                state.alertData.message = 'Se ha realizado un pedido'
+                setTimeout(() => {
+                    state.alertData.open = false
+                }, 3000);
+            } else if (m.status != 200 && m){
+                state.alertData.open = true
+                state.alertData.status = 403
+                state.alertData.message = 'No se ha podido realizar el pedido'
+                setTimeout(() => {
+                    state.alertData.open = false
+                }, 3000);
             }
             state.createOrderData.open = false
         }
