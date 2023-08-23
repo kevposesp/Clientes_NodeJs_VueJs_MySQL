@@ -60,10 +60,22 @@ export function clientsComp() {
 
     }
 
+    const createClient = async (client) => {
+        const res = await ApiService.post(
+            "/client/create",
+            client
+        )
+
+        console.log(res);
+
+        return res
+    }
+
     return {
         list,
         deleteClient,
         listClient,
-        updateClient
+        updateClient,
+        createClient
     }
 }

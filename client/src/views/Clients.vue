@@ -1,6 +1,7 @@
 <template>
     <div class="clients">
         <div class="cont">
+            <button class="btn btn-success mx-1 float-end" @click="state.createClientData.open = true">Añadir Cliente <i class="bi bi-plus-lg"></i></button>
             <div class="col-md-12 table-responsive">
                 <table class="table">
                     <thead>
@@ -65,7 +66,8 @@
         </div>
         <div v-if="modalData.open" class="modal-backdrop fade" :class="modalData.open ? 'show' : ''"></div>
         <Alert :alert-data="state.alertData" v-if="state.alertData.open"></Alert>
-        <CreateOrder :create-order-data="state.createOrderData" v-on:statusOrder="res" v-if="state.createOrderData.open"></CreateOrder>
+        <CreateOrder :create-order-data="state.createOrderData" v-on:statusOrder="createOrderRes" v-if="state.createOrderData.open"></CreateOrder>
+        <CreateClient v-on:statusClient="createClientRes" v-if="state.createClientData.open"></CreateClient>
     </div>
 </template>
 
@@ -74,9 +76,10 @@ import { clientsComp } from '../composables/clients'
 import { ref, reactive } from 'vue'
 import Alert from '../components/Alert.vue'
 import CreateOrder from '../components/CreateOrder.vue'
+import CreateClient from '../components/CreateClient.vue'
 
 export default {
-    components: { Alert, CreateOrder },
+    components: { Alert, CreateOrder, CreateClient },
     setup() {
         const state = reactive({
             alertData: {
@@ -88,6 +91,9 @@ export default {
                 open: false,
                 idClient: 0,
                 nombreClient: ''
+            },
+            createClientData: {
+                open: false
             }
         })
         const modalData = reactive({
@@ -134,7 +140,7 @@ export default {
             }
         }
 
-        const res = (m) => {
+        const createOrderRes = (m) => {
             console.log(m);
             if(m.status == 200) {
                 state.alertData.open = true
@@ -154,13 +160,34 @@ export default {
             state.createOrderData.open = false
         }
 
+        const createClientRes = (m) => {
+            if(m.status == 200) {
+                state.alertData.open = true
+                state.alertData.status = 200
+                state.alertData.message = 'Se ha creado el cliente'
+                getClients()
+                setTimeout(() => {
+                    state.alertData.open = false
+                }, 3000);
+            } else if (m.status != 200 && m){
+                state.alertData.open = true
+                state.alertData.status = 403
+                state.alertData.message = 'No se ha podido crear'
+                setTimeout(() => {
+                    state.alertData.open = false
+                }, 3000);
+            }
+            state.createClientData.open = false
+        }
+
         return {
             clients,
             deleteModal,
             modalData,
             deleteCli,
             state,
-            res
+            createOrderRes,
+            createClientRes
         }
     },
 }

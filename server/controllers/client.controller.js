@@ -94,11 +94,48 @@ deleteClient = async (req, res) => {
     }
 }
 
+createClient = async (req, res) => {
+    const { nombreClient, dirClient, telfClient } = req.body
+    
+    let telfClient2 = null
+    if (req.body.telfClient2 != "") {
+        telfClient2 = req.body.telfClient2
+    }
+    
+    let notaClient = null
+    if (req.body.notaClient != "") {
+        notaClient = req.body.notaClient
+    }
+
+    await User.create({
+        nombre: nombreClient,
+        direccion: dirClient,
+        notas: notaClient,
+        tel: telfClient,
+        telSec: telfClient2,
+        username: null,
+        password: null,
+        enableLog: false,
+        status: 1
+    }).then((client) => {
+        if (client) {
+            res.status(200).send({
+                message: 'create_ok'
+            })
+        } else {
+            res.status(500).send({
+                message: 'err_create_client'
+            })
+        }
+    })
+}
+
 const authController = {
     listClients,
     listClient,
     updateClient,
-    deleteClient
+    deleteClient,
+    createClient
 }
 
 module.exports = authController

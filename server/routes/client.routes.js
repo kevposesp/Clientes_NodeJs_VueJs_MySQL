@@ -1,5 +1,6 @@
 const { verifyToken } = require("../middleware/authJwt");
-const { listClients, listClient, updateClient, deleteClient } = require("../controllers/client.controller");
+const { listClients, listClient, updateClient, deleteClient, createClient } = require("../controllers/client.controller");
+const { checkAccess } = require("../middleware/auth");
 
 module.exports = function (app) {
     app.use(function (req, res, next) {
@@ -12,17 +13,11 @@ module.exports = function (app) {
 
     app.get(
         "/clients/list",
-        [
-            verifyToken
-        ],
         listClients
     )
     
     app.post(
         "/client/list",
-        [
-            verifyToken
-        ],
         listClient
     )
 
@@ -43,12 +38,12 @@ module.exports = function (app) {
     )
 
 
-    // app.get(
-    //     "/client/crete",
-    //     [
-    //         authJwt.verifyToken
-    //     ],
-    //     create
-    // )
+    app.post(
+        "/client/create",
+        [
+            verifyToken
+        ],
+        createClient
+    )
 
 };
