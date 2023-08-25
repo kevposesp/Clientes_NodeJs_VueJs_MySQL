@@ -29,8 +29,28 @@ export function ordersComp() {
         return res
     }
 
+    const editOrder = async (data) => {
+        const res = await ApiService.post(
+            "/order/edit",
+            data
+        )
+        
+        return res
+    }
+
+    const cancelOrder = async (id) => {
+        const res = await ApiService.post(
+            "/order/cancel",
+            {id}
+        )
+
+        return res
+    }
+
     return {
         readOrders,
-        createOrder
+        createOrder,
+        editOrder,
+        cancelOrder
     }
 }

@@ -13,6 +13,7 @@ readOrders = async (req, res) => {
         + " left join `orders` o on o.`eventId` = e.id"
         + " left join users u on o.`userId` = u.id"
         + " left join users ad on ad.id = o.`ownerId`"
+        // + " where o.id is not null"
         + " order by e.dateOn, o.horaPedido;"
 
     const orders = await sequelize.query(query, {
@@ -69,9 +70,60 @@ createOrder = async (req, res) => {
     })
 }
 
+updateOrder = async (req, res) => {
+    const order = await Order.findOne({
+        where: {
+            id: req.body.orderId
+        },
+        attributes: ['id', 'direccionPedido', 'nota', 'status', 'horaPedido']
+    })
+    if(order){
+        await order.update({
+            status: req.body.status,
+            direccionPedido: req.body.dirOrder,
+            nota: req.body.notaOrder,
+            horaPedido: req.body.hourOrder,
+        })
+        await order.save()
+        res.status(200).send({
+            message: 'update_ok',
+            order
+        })
+    } else {
+        res.status(403).send({
+            message: 'order_not_found'
+        })
+    }
+};
+
+cancelOrder = async (req, res) => {
+    const order = await Order.findOne({
+        where: {
+            id: req.body.id
+        },
+        attributes: ['id', 'status']
+    })
+    if(order) {
+        await order.update({
+            status: 4
+        })
+        await order.save()
+        res.status(200).send({
+            message: 'update_ok',
+            order
+        })
+    } else {
+        res.status(403).send({
+            message: 'order_not_found'
+        })
+    }
+}
+
 const OrderController = {
     readOrders,
-    createOrder
+    createOrder,
+    updateOrder,
+    cancelOrder
 }
 
 module.exports = OrderController

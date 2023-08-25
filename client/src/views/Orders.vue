@@ -29,8 +29,12 @@
                             <tbody>
                                 <tr v-for="(order, key) in state.ordersList[date]" :key="key">
                                     <template v-if="order.orderId">
-                                        <th scope="row">{{ key+ 1 }}</th>
-                                        <td>{{ order.nombreClient }}</td>
+                                        <th scope="row">{{ key + 1 }}</th>
+                                        <td>
+                                            <router-link :to="'/client/edit/' + order.clientId" class="noLink">
+                                                {{ order.nombreClient }}
+                                            </router-link>
+                                        </td>
                                         <td v-if="order.direccionPedido != null">{{ order.direccionPedido }}</td>
                                         <td v-if="order.direccionPedido == null">{{ order.direccion }}</td>
                                         <td>{{ order.horaPedido.substring(0, 5) }}</td>
@@ -44,7 +48,8 @@
                                             <span class="badge rounded-pill text-bg-success"
                                                 v-if="order.status == 3">Completado</span>
                                             <span class="badge rounded-pill text-bg-warning"
-                                                v-if="order.status == 2">Pendiente Pago</span>
+                                                v-if="order.status == 2">Pendiente
+                                                Pago</span>
                                             <span class="badge rounded-pill text-bg-danger"
                                                 v-if="order.status == 4">Cancelado</span>
                                             <span class="badge rounded-pill text-bg-primary" v-if="order.status == 1">En
@@ -53,11 +58,14 @@
                                                 v-if="order.status == 5">Preparado</span>
                                         </td>
                                         <td>
-                                            <button class="btn btn-sm btn-primary mx-1"><i
+                                            <button class="btn btn-sm btn-primary mx-1"
+                                                @click="state.componentEditOrder = true, state.editOrderData = order"><i
                                                     class="bi bi-pencil-square"></i></button>
-                                            <button class="btn btn-sm btn-danger mx-1"><i
+                                            <button class="btn btn-sm btn-danger mx-1"
+                                                @click="cancelOrderFunc(order.orderId)"><i
                                                     class="bi bi-trash3-fill"></i></button>
-                                            <button class="btn btn-sm btn-success mx-1"><i
+                                            <button class="btn btn-sm btn-success mx-1"
+                                                @click="state.createOrderData.open = true, state.createOrderData.idClient = order.clientId, state.createOrderData.nombreClient = order.nombreClient"><i
                                                     class="bi bi-plus-lg"></i></button>
                                         </td>
                                     </template>
@@ -79,21 +87,46 @@
                 </div>
             </div>
         </div>
+        <Alert :alert-data="state.alertData" v-if="state.alertData.open"></Alert>
+        <CreateOrder :create-order-data="state.createOrderData" v-on:statusOrder="createOrderRes"
+            v-if="state.createOrderData.open"></CreateOrder>
+        <EditOrder :edit-order-data="state.editOrderData" v-on:statusOrder="editOrderRes" v-if="state.componentEditOrder">
+        </EditOrder>
     </div>
 </template>
 
 <script>
+import Alert from '@/components/Alert.vue';
+import EditOrder from '@/components/EditOrder.vue';
+import CreateOrder from '../components/CreateOrder.vue'
 import { ordersComp } from '@/composables/orders';
 import { ref, reactive } from 'vue'
 
 export default {
+    components: { Alert, EditOrder, CreateOrder },
     setup() {
-        const state = reactive({})
+        const state = reactive({
+            alertData: {
+                open: false,
+                status: 0,
+                message: ''
+            },
+            createOrderData: {
+                open: false,
+                idClient: 0,
+                nombreClient: ''
+            },
+            componentEditOrder: false,
+            editOrderData: {}
+        })
+
         const changeAvtiveMenu = (m) => {
             state.activeMenu = m
+            localStorage.setItem('activeMenu', m)
+            getOrders()
         }
 
-        const { readOrders } = ordersComp()
+        const { readOrders, cancelOrder } = ordersComp()
         const getOrders = async () => {
             let ordersList = await readOrders()
             state.dates = []
@@ -101,7 +134,7 @@ export default {
                 state.dates.push(o)
             }
             state.ordersList = ordersList.orders
-            state.activeMenu = state.dates[0]
+            state.activeMenu = state.dates.includes(localStorage.getItem('activeMenu')) ? localStorage.getItem('activeMenu') : state.dates[0]
         }
         getOrders()
 
@@ -130,9 +163,71 @@ export default {
             return res2 + '/' + res
         }
 
+        const editOrderRes = (m) => {
+            if (m.status == 200) {
+                state.alertData.open = true
+                state.alertData.status = 200
+                state.alertData.message = 'Se ha editado un pedido'
+                getOrders()
+                setTimeout(() => {
+                    state.alertData.open = false
+                }, 3000);
+            } else if (m.status != 200 && m) {
+                state.alertData.open = true
+                state.alertData.status = 403
+                state.alertData.message = 'No se ha podido editar el pedido'
+                setTimeout(() => {
+                    state.alertData.open = false
+                }, 3000);
+            }
+            state.componentEditOrder = false
+        }
+
+        const cancelOrderFunc = async (id) => {
+            let res = await cancelOrder(id)
+            if (res) {
+                state.alertData.open = true
+                state.alertData.status = 200
+                state.alertData.message = 'Se ha cancelado un pedido'
+                getOrders()
+                setTimeout(() => {
+                    state.alertData.open = false
+                }, 3000);
+            } else {
+                state.alertData.open = true
+                state.alertData.status = 403
+                state.alertData.message = 'No se ha podido cancelar el pedido'
+                setTimeout(() => {
+                    state.alertData.open = false
+                }, 3000);
+            }
+        }
+
+        const createOrderRes = (m) => {
+            if (m.status == 200) {
+                state.alertData.open = true
+                state.alertData.status = 200
+                state.alertData.message = 'Se ha realizado un pedido'
+                setTimeout(() => {
+                    state.alertData.open = false
+                }, 3000);
+            } else if (m.status != 200 && m) {
+                state.alertData.open = true
+                state.alertData.status = 403
+                state.alertData.message = 'No se ha podido realizar el pedido'
+                setTimeout(() => {
+                    state.alertData.open = false
+                }, 3000);
+            }
+            state.createOrderData.open = false
+        }
+
         return {
             state,
             changeAvtiveMenu,
+            editOrderRes,
+            createOrderRes,
+            cancelOrderFunc,
             sum
         }
 
@@ -140,9 +235,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.orders {
+<style lang="scss">.orders {
     margin-top: 56px;
     padding: 5px;
-}
-</style>
+}</style>
