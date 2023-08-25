@@ -29,7 +29,8 @@
                                     <button class="btn btn-sm btn-primary mx-1" @click="state.edit = true"><i
                                             class="bi bi-pencil-square"></i></button>
 
-                                    <button class="btn btn-sm btn-danger mx-1"><i
+                                    <button class="btn btn-sm btn-danger mx-1"
+                                        @click="state.deleteClientData.open = true, state.deleteClientData.id = state.client.id, state.deleteClientData.nombre = state.client.nombre"><i
                                             class="bi bi-trash3-fill"></i></button>
                                     <button class="btn btn-sm btn-success mx-1"><i class="bi bi-plus-lg"></i></button>
                                 </div>
@@ -92,44 +93,11 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="col-md-6">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <p class="mb-4"><span class="text-primary font-italic me-1">assigment</span> Project
-                                Status
-                            </p>
-                            <p class="mb-1" style="font-size: .77rem;">Web Design</p>
-                            <div class="progress rounded" style="height: 5px;">
-                                <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80"
-                                    aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <p class="mt-4 mb-1" style="font-size: .77rem;">Website Markup</p>
-                            <div class="progress rounded" style="height: 5px;">
-                                <div class="progress-bar" role="progressbar" style="width: 72%" aria-valuenow="72"
-                                    aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <p class="mt-4 mb-1" style="font-size: .77rem;">One Page</p>
-                            <div class="progress rounded" style="height: 5px;">
-                                <div class="progress-bar" role="progressbar" style="width: 89%" aria-valuenow="89"
-                                    aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <p class="mt-4 mb-1" style="font-size: .77rem;">Mobile Template</p>
-                            <div class="progress rounded" style="height: 5px;">
-                                <div class="progress-bar" role="progressbar" style="width: 55%" aria-valuenow="55"
-                                    aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <p class="mt-4 mb-1" style="font-size: .77rem;">Backend API</p>
-                            <div class="progress rounded mb-2" style="height: 5px;">
-                                <div class="progress-bar" role="progressbar" style="width: 66%" aria-valuenow="66"
-                                    aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-
             </div>
         </div>
         <Alert :alert-data="state.alertData" v-if="state.alertData.open"></Alert>
+        <DeleteClient :delete-client-data="state.deleteClientData" v-on:statusClient="deleteClientRes"
+            v-if="state.deleteClientData.open"></DeleteClient>
     </div>
 </template>
 
@@ -137,11 +105,12 @@
 import { clientsComp } from '../composables/clients'
 import { ref, reactive } from 'vue'
 import Alert from '../components/Alert.vue'
+import DeleteClient from '../components/DeleteClient.vue'
 import { useRoute } from 'vue-router';
 import router from '@/router';
 
 export default {
-    components: { Alert },
+    components: { Alert, DeleteClient },
     setup() {
         const state = reactive({
             alertData: {
@@ -150,7 +119,12 @@ export default {
                 message: ''
             },
             client: {},
-            edit: false
+            edit: false,
+            deleteClientData: {
+                open: false,
+                id: 0,
+                nombre: ''
+            }
         })
         const { listClient, updateClient } = clientsComp()
         const route = useRoute()
@@ -194,7 +168,7 @@ export default {
                 getClient()
             }
         }
-        
+
         const processUserData = () => {
             let data = state.client;
             return {
@@ -207,7 +181,28 @@ export default {
             }
         }
 
+        const deleteClientRes = async (m) => {
+            if (m.message == 'delete_user_ok') {
+                state.alertData.open = true
+                state.alertData.status = 200
+                state.alertData.message = 'Se ha eliminado correctamente'
+                setTimeout(() => {
+                    state.alertData.open = false
+                    router.push('/clients')
+                }, 3000);
+            } else if (m.message != "delete_user_ok" && m) {
+                state.alertData.open = true
+                state.alertData.status = 403
+                state.alertData.message = 'Error interno'
+                setTimeout(() => {
+                    state.alertData.open = false
+                }, 3000);
+            }
+            state.deleteClientData.open = false
+        }
+
         return {
+            deleteClientRes,
             state,
             saveClient
         }
